@@ -1,66 +1,152 @@
 :root {
-  --pad-size: 110px;
-  --clr-pad: #6366f1;
+    --pad-size: 110px;
+    --clr-pad: #6366f1;
+    --clr-panel-bg: #f8f9fa;
+    --clr-panel-border: #e9ecef;
+    --clr-interval-assigned: #22c55e;
+    --clr-interval-free: #6c757d;
 }
+
 @media (max-width: 500px) {
-  :root {
-    --pad-size: 80px;
-  }
+    :root {
+        --pad-size: 80px;
+    }
 }
+
 body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
+
 .top-bar {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
+
+.main-content {
+    display: flex;
+    gap: 20px;
+
+    /* stretch children so the loop-panel grows to the grid’s full height */
+    align-items: stretch;
+}
+
+.loop-panel {
+    /* same selectors, but add flex for fill  */
+    background-color: var(--clr-panel-bg);
+    border: 1px solid var(--clr-panel-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    padding: 15px;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.loop-panel h3 {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+}
+
+.interval-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.interval-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: white;
+    border: 1px solid var(--clr-panel-border);
+    transition: background 0.15s;
+}
+
+.interval-item.assigned {
+    background: #ede9fe;
+}
+
+.interval-name {
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.interval-key {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+.interval-key.free {
+    background: var(--clr-interval-free);
+}
+.interval-key.assigned {
+    background: var(--clr-interval-assigned);
+}
+
 .grid {
-  display: grid;
-  grid-template-columns: repeat(3, var(--pad-size));
-  justify-content: center;
-  gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, var(--pad-size));
+    justify-content: center;
+    gap: 12px;
 }
 .pad {
-  width: var(--pad-size);
-  height: var(--pad-size);
-  border-radius: 12px;
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  position: relative;
-  transition: transform .1s;
+    width: var(--pad-size);
+    height: var(--pad-size);
+    border-radius: 12px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.1s;
 }
 .pad.active {
-  transform: scale(.9);
-  background: var(--clr-pad);
-  color: #fff;
+    transform: scale(0.9);
+    background: var(--clr-pad);
+    color: #fff;
 }
 .pad.looping::after {
-  content: 'LOOP';
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  font-size: .55rem;
-  background: #22c55e;
-  color: #fff;
-  padding: 2px 4px;
-  border-radius: 4px;
+    content: "LOOP";
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 0.55rem;
+    background: #22c55e;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
 }
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: .6; }
-  100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 .pad.looping {
-  animation: pulse 1s infinite;
+    animation: pulse 1s infinite;
 }

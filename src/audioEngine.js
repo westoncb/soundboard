@@ -62,6 +62,28 @@ export function setBpm(bpm) {
 }
 
 /**
+ * Get the current loop assignments
+ * Returns an object mapping subdivisions to pad indices (or null if unassigned)
+ */
+export function getLoopAssignments() {
+  const assignments = {};
+
+  // Initialize all subdivisions as unassigned
+  subdivisions.forEach((sub) => {
+    assignments[sub] = null;
+  });
+
+  // Update with current assignments
+  loops.forEach((loopInfo, index) => {
+    if (loopInfo) {
+      assignments[loopInfo.sub] = index;
+    }
+  });
+
+  return assignments;
+}
+
+/**
  * Toggle a looping note for the given pad index.
  * Pads are assigned subdivisions in *fixed order* defined by `subdivisions`.
  * The loop always starts on the next grid-aligned tick so multiple pads stay

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { play, toggleLoop, setBpm } from "./audioEngine.js";
+import { play, toggleLoop, setBpm, getLoopAssignments } from "./audioEngine.js";
 import useKeyboard from "./useKeyboard.js";
+import LoopPanel from "./LoopPanel.jsx";
 
 const keys = ["Q", "W", "E", "A", "S", "D", "Z", "X", "C"];
 
@@ -8,6 +9,7 @@ export default function App() {
   const [bpm, setBpmState] = useState(120);
   const [transportRunning, setTransportRunning] = useState(false);
   const [looping, setLooping] = useState(Array(9).fill(false));
+  const [loopAssignments, setLoopAssignments] = useState({});
 
   useKeyboard((key, shift) => {
     const idx = keys.indexOf(key.toUpperCase());
@@ -18,6 +20,11 @@ export default function App() {
   useEffect(() => {
     setBpm(bpm);
   }, [bpm]);
+
+  useEffect(() => {
+    // Update loop assignments whenever looping state changes
+    setLoopAssignments(getLoopAssignments());
+  }, [looping]);
 
   function handlePad(index, withShift) {
     if (!transportRunning) {
@@ -54,7 +61,7 @@ export default function App() {
     <div className="app">
       <div className="top-bar">
         <label>
-          BPM {bpm}
+          BPM&nbsp;{bpm}
           <input
             type="range"
             min="60"
@@ -64,18 +71,23 @@ export default function App() {
           />
         </label>
       </div>
-      <div className="grid">
-        {keys.map((k, i) => (
-          <button
-            key={k}
-            id={`pad-${i}`}
-            className={`pad${looping[i] ? " looping" : ""}`}
-            onClick={(e) => handlePad(i, e.shiftKey)}
-            aria-label={`Pad ${k}`}
-          >
-            {k}
-          </button>
-        ))}
+
+      <div className="main-content">
+        <LoopPanel loopAssignments={loopAssignments} keys={keys} />
+
+        <div className="grid">
+          {keys.map((k, i) => (
+            <button
+              key={k}
+              id={`pad-${i}`}
+              className={`pad${looping[i] ? " looping" : ""}`}
+              onClick={(e) => handlePad(i, e.shiftKey)}
+              aria-label={`Pad ${k}`}
+            >
+              {k}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
